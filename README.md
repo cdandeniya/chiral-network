@@ -7,6 +7,12 @@ Chiral Network is a BitTorrent-like peer-to-peer file storage and sharing system
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Build Status](https://github.com/chiral-network/chiral-network/workflows/test/badge.svg)](https://github.com/chiral-network/chiral-network/actions)
 
+## 🌐 Live Demo
+
+**Web Version**: [View Live Demo](https://chiral-network.vercel.app) *(Note: Web version has limited functionality - full features available in desktop app)*
+
+**Desktop App**: Download from [Releases](https://github.com/Aery1e/chiral-network/releases)
+
 ## ✨ Features
 
 - 🌐 **Fully Decentralized** - No central servers, DHT-based discovery
@@ -45,6 +51,7 @@ npm run tauri:build
 - **[Implementation Guide](docs/implementation-guide.md)** - Development workflows
 - **[Contributing Guide](docs/contributing.md)** - How to contribute
 - **[Deployment Guide](docs/deployment-guide.md)** - Production deployment
+- **[Web Deployment](docs/DEPLOYMENT.md)** - Hosting for portfolio/resume showcase
 
 ### More
 

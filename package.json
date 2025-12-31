@@ -9,11 +9,15 @@
     "tauri:build": "tauri build",
     "check": "tsc --noEmit && svelte-check --tsconfig ./tsconfig.json",
     "build": "vite build",
+    "build:web": "vite build",
     "preview": "vite preview",
+    "preview:web": "npm run build && vite preview",
     "tauri": "tauri",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "deploy:vercel": "vercel --prod",
+    "deploy:netlify": "netlify deploy --prod"
   },
   "dependencies": {
     "@mateothegreat/svelte5-router": "^2.16.19",
