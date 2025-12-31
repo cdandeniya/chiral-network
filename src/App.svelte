@@ -34,9 +34,8 @@ import type { AppSettings, ActiveBandwidthLimits } from './lib/stores'
     import { detectUserRegion } from '$lib/services/geolocation';
     import { paymentService } from '$lib/services/paymentService';
     import { subscribeToTransferEvents, unsubscribeFromTransferEvents } from '$lib/stores/transferEventsStore';
-import { listen } from '@tauri-apps/api/event';
-import { invoke } from '@tauri-apps/api/core';
-import { exit } from '@tauri-apps/plugin-process';
+// Tauri APIs - dynamically imported to support web builds
+// These will be loaded conditionally in onMount
     // gets path name not entire url:
     // ex: http://locatlhost:1420/download -> /download
     
@@ -131,7 +130,7 @@ const navigateTo = (page: string, path: string) => {
     }
   };
 
-  const pushBandwidthLimits = (limits: ActiveBandwidthLimits) => {
+  const pushBandwidthLimits = async (limits: ActiveBandwidthLimits) => {
     const uploadKbps = Math.max(0, Math.floor(limits.uploadLimitKbps || 0));
     const downloadKbps = Math.max(0, Math.floor(limits.downloadLimitKbps || 0));
     const signature = `${uploadKbps}:${downloadKbps}`;
@@ -146,13 +145,16 @@ const navigateTo = (page: string, path: string) => {
       return;
     }
 
-  invoke("set_bandwidth_limits", {
-    uploadKbps,
-    downloadKbps,
-  }).catch((error) => {
-    console.error("Failed to apply bandwidth limits:", error);
-  });
-};
+    try {
+      const { invoke } = await import('@tauri-apps/api/core');
+      await invoke("set_bandwidth_limits", {
+        uploadKbps,
+        downloadKbps,
+      });
+    } catch (error) {
+      console.error("Failed to apply bandwidth limits:", error);
+    }
+  };
 
 // First-run wizard handlers
 function handleFirstRunComplete() {
@@ -188,6 +190,7 @@ function handleFirstRunComplete() {
       // Listen for payment notifications from backend
       if (typeof window !== "undefined" && "__TAURI_INTERNALS__" in window) {
         try {
+          const { listen } = await import('@tauri-apps/api/event');
           // Listener for BitTorrent protocol payments
           const torrentUnlisten = await listen(
             "torrent_seeder_payment_received",
@@ -299,6 +302,7 @@ function handleFirstRunComplete() {
           let hasAccount = false;
           if (typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window) {
             try {
+              const { invoke } = await import('@tauri-apps/api/core');
               hasAccount = await invoke<boolean>('has_active_account');
               
               // If backend has account, restore it to frontend
@@ -349,6 +353,7 @@ function handleFirstRunComplete() {
           let hasKeystoreFiles = false;
           if (typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window) {
             try {
+              const { invoke } = await import('@tauri-apps/api/core');
               const keystoreFiles = await invoke<string[]>('list_keystore_accounts');
               hasKeystoreFiles = keystoreFiles && keystoreFiles.length > 0;
             } catch (error) {
@@ -428,7 +433,10 @@ function handleFirstRunComplete() {
           await fileService.initializeServices();
         } else {
           // Only start file transfer service, not DHT
-          await invoke("start_file_transfer_service");
+          if (typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window) {
+            const { invoke } = await import('@tauri-apps/api/core');
+            await invoke("start_file_transfer_service");
+          }
         }
         console.log("✅ File transfer and WebRTC services started successfully");
       } catch (error) {
@@ -527,10 +535,16 @@ function handleFirstRunComplete() {
       }
 
 
-      // Ctrl/Cmd + Q - Quit application
+      // Ctrl/Cmd + Q - Quit application (Tauri only)
       if ((event.ctrlKey || event.metaKey) && event.key === "q") {
         event.preventDefault();
-        exit(0);
+        if (typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window) {
+          import('@tauri-apps/plugin-process').then(({ exit }) => {
+            exit(0);
+          }).catch(() => {
+            // Ignore if Tauri APIs not available
+          });
+        }
         return;
       }
 

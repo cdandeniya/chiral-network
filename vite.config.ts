@@ -54,4 +54,7 @@ export default defineConfig({
       },
     },
   },
+  define: {
+    __TAURI_INTERNALS__: JSON.stringify({}),
+  },
 });
