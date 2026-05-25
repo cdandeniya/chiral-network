@@ -22,6 +22,28 @@ const tr: TranslateFn = (key, params) =>
   (get(t) as unknown as TranslateFn)(key, params);
 
 const DEFAULT_POLL_INTERVAL = 15_000;
+const DEMO_ACCOUNT_STORAGE_KEY = "chiral_demo_account";
+
+/** Restore a demo wallet from localStorage (web/portfolio mode only). */
+export function restoreWebDemoAccount(): boolean {
+  if (typeof window === "undefined" || "__TAURI_INTERNALS__" in window) {
+    return false;
+  }
+  try {
+    const raw = localStorage.getItem(DEMO_ACCOUNT_STORAGE_KEY);
+    if (!raw) return false;
+    const parsed = JSON.parse(raw) as ETCAccount;
+    if (!parsed?.address) return false;
+    etcAccount.set({
+      address: parsed.address,
+      private_key: parsed.private_key ?? "",
+    });
+    wallet.update((w) => ({ ...w, address: parsed.address }));
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 export interface WalletServiceOptions {
   pollIntervalMs?: number;
@@ -1273,6 +1295,14 @@ export class WalletService {
       actualBalance: 0,
       pendingTransactions: 0,
     }));
+
+    if (!this.isTauri && typeof localStorage !== "undefined") {
+      try {
+        localStorage.setItem(DEMO_ACCOUNT_STORAGE_KEY, JSON.stringify(formatted));
+      } catch {
+        /* ignore quota / private mode */
+      }
+    }
   }
 
   private pushRecentBlock(block: {

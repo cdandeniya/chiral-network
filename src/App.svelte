@@ -345,8 +345,13 @@ function handleFirstRunComplete() {
               console.warn('Failed to check account status:', error);
             }
           } else {
-            // For web/demo mode, check frontend store
-            hasAccount = get(etcAccount) !== null;
+            // For web/demo mode, restore persisted demo wallet (e.g. Vercel showcase)
+            const { restoreWebDemoAccount } = await import('./lib/wallet');
+            if (restoreWebDemoAccount()) {
+              hasAccount = true;
+            } else {
+              hasAccount = get(etcAccount) !== null;
+            }
           }
 
           // Check if there are any keystore files (Tauri only)

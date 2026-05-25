@@ -22,58 +22,60 @@ The hosted web build showcases the full UI (downloads, network monitoring, reput
 
 ## Screenshots
 
+Captured from the [live demo](https://chiral-network.vercel.app/) — each image shows a different app page (sidebar + main content). On first visit, click **Create Test Wallet** to explore without setup.
+
 ### Download & file search
 
-Search by Merkle hash, magnet link, torrent, ED2K, or FTP URL. Manage active, queued, and completed downloads.
+Merkle hash / magnet / torrent / ED2K / FTP search, download queue filters, and restartable HTTP downloads.
 
-![Download page](docs/screenshots/download.png)
+![Download page — search, queue filters, and download history](docs/screenshots/download.png)
 
 ### Shared files (upload / seeding)
 
-Instant seeding interface — files become available to the network as soon as they are added.
+Drag-and-drop seeding UI and shared-files list for instant network availability.
 
-![Upload page](docs/screenshots/upload.png)
+![Upload page — file sharing and seeding](docs/screenshots/upload.png)
 
 ### Network & DHT
 
-Monitor node status, DHT health, peer discovery, geographic distribution, and bandwidth.
+Peer discovery, Geth node status, DHT connection controls, and network metrics.
 
-![Network page](docs/screenshots/network.png)
+![Network page — DHT, node lifecycle, and peer tools](docs/screenshots/network.png)
 
 ### Reputation system
 
-Peer trust scoring, analytics, and relay leaderboard for intelligent peer selection.
+Trust-level distribution, peer scoring, analytics cards, and relay leaderboard.
 
-![Reputation page](docs/screenshots/reputation.png)
+![Reputation page — trust analytics and peer rankings](docs/screenshots/reputation.png)
 
 ### Analytics
 
-Bandwidth, storage, and network activity metrics.
+Bandwidth caps, storage usage, and network activity dashboard.
 
-![Analytics page](docs/screenshots/analytics.png)
+![Analytics page — usage metrics dashboard](docs/screenshots/analytics.png)
 
 ### Mining
 
-CPU mining controls, hash rate, and reward tracking (desktop + node required for live mining).
+Mining controls, profitability calculator, and hash-rate monitoring.
 
-![Mining page](docs/screenshots/mining.png)
+![Mining page — mining dashboard and controls](docs/screenshots/mining.png)
 
 ### Wallet & account
 
-HD wallet support, balances, transactions, 2FA, and blacklist management.
+Wallet balance, send transactions, transaction history, 2FA, and blacklist management.
 
-![Account page](docs/screenshots/account.png)
+![Account page — wallet, transfers, and security](docs/screenshots/account.png)
 
 ### Settings
 
-Storage, network, privacy, proxy, relay, and internationalization options.
+App configuration for storage, networking, privacy, proxy, and relay options.
 
-![Settings page](docs/screenshots/settings.png)
+![Settings page — configuration panels](docs/screenshots/settings.png)
 
 <details>
-<summary>Navigation menu</summary>
+<summary>Mobile navigation menu</summary>
 
-![App navigation](docs/screenshots/navigation.png)
+![Navigation drawer — Download, Network, Mining, Reputation, and more](docs/screenshots/navigation.png)
 
 </details>
 
